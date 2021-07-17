@@ -1,9 +1,20 @@
 import cv2
 import mediapipe as mp
-mp_drawing = mp.solutions.drawing_utils
-mp_hands = mp.solutions.hands
+from openpyxl import Workbook
+
+# Excel
+wb = Workbook()
+ws = wb.active
+row = 0
+def get_letter(x):
+    return chr(ord('A') + x)
+
+def get_cell(p):
+    return f'{p.x},{p.y},{p.z}'
 
 # Training
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
 IMAGE_FILES = ["hand.png"]
 with mp_hands.Hands(
     static_image_mode=True,
@@ -19,8 +30,13 @@ with mp_hands.Hands(
 
     image_height, image_width, _ = image.shape
     annotated_image = image.copy()
+    row = row + 1
     for hand_landmarks in results.multi_hand_landmarks:
-        print('hand_landmarks:', hand_landmarks)
+        for i in range(0, len(hand_landmarks.landmark)):
+            ws[get_letter(i) + str(row)] = get_cell(hand_landmarks.landmark[i])
+
+
+wb.save("data.xlsx")
 
 # Real-time Classification
 cap = cv2.VideoCapture(0)

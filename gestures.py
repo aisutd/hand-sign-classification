@@ -15,7 +15,7 @@ def get_cell(p):
 # Training
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
-IMAGE_FILES = ["hand.png"]
+IMAGE_FILES = [] #used to be "hand.png"
 with mp_hands.Hands(
     static_image_mode=True,
     max_num_hands=2,
